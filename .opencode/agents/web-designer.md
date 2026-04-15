@@ -199,7 +199,7 @@ AI에게 랜딩 페이지를 맡기면 그라데이션, 다채로운 색상, 아
 
 **프로젝트 관련:**
 ```
-roam_remember(memory="[내용]", categories=["{{PROJECT_NAME}}/Design"])
+roam_remember(memory="[내용]", categories=["{{PROJECT_NAME}}/Memory/Design"])
 ```
 
 **범용 디자인 지식:**

@@ -19,18 +19,18 @@
 ## Block-Based Work Principle (Session Start Required)
 
 > **Work Blocks:** `roam_fetch_page_by_title("{{PROJECT_NAME}}/WorkBlocks")`
-> **Current Context:** `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Context")` — 항상 로드
-> **Core 상식:** `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Core")` — 항상 로드 (세션마다 필수 기반 지식)
-> **토픽별 조회:** `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/[Topic]")` — 온디맨드 (태그 목록: {{PROJECT_NAME}}/Memory 페이지 참조)
+> **Current Context:** `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/Context")` — 항상 로드
+> **Core 상식:** `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/Core")` — 항상 로드 (세션마다 필수 기반 지식)
+> **토픽별 조회:** `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/[Topic]")` — 온디맨드 (태그 목록: {{PROJECT_NAME}}/Memory 페이지 참조)
 
 **문서 정책:** 모든 문서 작업은 RoamResearch 우선. 로컬 백업 불필요 (정본 = Roam).
 
 ### Session Start
 
-1. `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Context")` — Current Context 로드
-2. `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Core")` — 핵심 상식 로드 (항상 필요)
+1. `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/Context")` — Current Context 로드
+2. `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/Core")` — 핵심 상식 로드 (항상 필요)
 3. `roam_fetch_page_by_title("{{PROJECT_NAME}}/WorkBlocks")` — 현재 Block + 미완료 Sub Task 파악 → Todo 등록
-4. 사용자 요청에서 토픽 추론 → `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/[Topic]")` 추가 실행
+4. 사용자 요청에서 토픽 추론 → `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/[Topic]")` 추가 실행
 
 ### Block Rules
 
@@ -67,9 +67,9 @@ Roam에 데이터를 읽거나 쓸 때, 문법이나 도구 사용법이 불확�
 
 ```
 {{PROJECT_NAME}}/Memory/
-├── {{PROJECT_NAME}}/Context       ← 현재 세션 상태 (항상 최신 1개만 유지)
-├── {{PROJECT_NAME}}/Core          ← 핵심 상식 (세션마다 필수 로드)
-└── {{PROJECT_NAME}}/[Topic]       ← 토픽별 메모리 (온디맨드)
+├── {{PROJECT_NAME}}/Memory/Context       ← 현재 세션 상태 (항상 최신 1개만 유지)
+├── {{PROJECT_NAME}}/Memory/Core          ← 핵심 상식 (세션마다 필수 로드)
+└── {{PROJECT_NAME}}/Memory/[Topic]       ← 토픽별 메모리 (온디맨드)
 ```
 
 #### Tier 2: 범용 메모리 (`Agent Memory`)
@@ -90,7 +90,7 @@ Agent Memory/
 ```
 roam_remember(
   memory="기억할 내용",
-  categories=["{{PROJECT_NAME}}/[Topic]"]
+  categories=["{{PROJECT_NAME}}/Memory/[Topic]"]
 )
 ```
 
@@ -112,17 +112,17 @@ roam_remember(
 
 | 목적 | 도구 |
 |------|------|
-| Current Context | `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Context")` |
+| Current Context | `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/Context")` |
 | 전체 프로젝트 메모리 | `roam_recall()` (필터 없는 전체 덤프 전용) |
-| 토픽별 필터 | `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/[Topic]")` |
+| 토픽별 필터 | `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/[Topic]")` |
 | 범용 메모리 전체 | `roam_search_for_tag(primary_tag="Agent Memory")` |
 | 범용 메모리 카테고리별 | `roam_search_for_tag(primary_tag="Agent Memory", near_tag="Agent/Dev")` 등 |
 
 ### Current Context 업데이트 (항상 최신 1개만 유지)
 
-1. `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Context")` — 기존 블록 UID 조회
+1. `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/Context")` — 기존 블록 UID 조회
 2. `roam_process_batch_actions` — 기존 블록 삭제 (delete-block)
-3. `roam_remember(memory="...", categories=["{{PROJECT_NAME}}/Context"])` — 새 블록 기록
+3. `roam_remember(memory="...", categories=["{{PROJECT_NAME}}/Memory/Context"])` — 새 블록 기록
 
 **목표:** `roam_recall()` 응답이 항상 **1,000 토큰 이내** 유지. 불필요한 기록 금지.
 
@@ -153,7 +153,7 @@ roam_remember(
 
 ### 4. RoamResearch Memory 업데이트
 
-- **Current Context** 업데이트: `roam_remember(memory="...", categories=["{{PROJECT_NAME}}/Context"])` (이전 블록 먼저 삭제)
+- **Current Context** 업데이트: `roam_remember(memory="...", categories=["{{PROJECT_NAME}}/Memory/Context"])` (이전 블록 먼저 삭제)
 - **범용 메모리** 체크: 이번 세션에서 프로젝트 무관한 유용한 지식이 있었는지 확인 → 있으면 Agent Memory에 기록
 
 ### 5. 기억/망각 정리

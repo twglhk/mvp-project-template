@@ -122,7 +122,7 @@ Activation 개선 타이밍: Retention(Aha Moment) 정의 후. 순서가 바뀌�
 
 **프로젝트 관련:**
 ```
-roam_remember(memory="[내용]", categories=["{{PROJECT_NAME}}/Product"])
+roam_remember(memory="[내용]", categories=["{{PROJECT_NAME}}/Memory/Product"])
 ```
 
 **범용 프로덕트 지식:**

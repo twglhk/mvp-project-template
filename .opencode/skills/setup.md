@@ -44,8 +44,8 @@ AGENTS.md에 `{{PROJECT_NAME}}` 플레이스홀더가 남아있을 때 자동으
 → "추가할 페이지 참조가 있나요? (없으면 엔터)"
 
 **메모리 태그 (기본):**
-- `[ProjectName]/Context` — 현재 세션 상태
-- `[ProjectName]/Core` — 핵심 상식
+- `[ProjectName]/Memory/Context` — 현재 세션 상태
+- `[ProjectName]/Memory/Core` — 핵심 상식
 
 → "추가할 메모리 태그가 있나요? (예: Design, API, Product 등. 없으면 엔터)"
 
@@ -134,8 +134,8 @@ content:
 title: "[ProjectName]/Memory"
 content:
   - level 1, heading 3: "메모리 태그"
-  - level 2: "[[{ProjectName}/Context]] — 현재 세션 상태 (항상 최신 1개만 유지)"
-  - level 2: "[[{ProjectName}/Core]] — 핵심 상식 (세션마다 필수 로드)"
+  - level 2: "[[{ProjectName}/Memory/Context]] — 현재 세션 상태 (항상 최신 1개만 유지)"
+  - level 2: "[[{ProjectName}/Memory/Core]] — 핵심 상식 (세션마다 필수 로드)"
   - (사용자 추가 태그들도 level 2로, 같은 형식)
 ```
 

@@ -94,9 +94,9 @@ Supabase SQL Editor에서 `supabase/migrations/001_init.sql` 실행.
 
 ```
 [ProjectName]/Memory/
-├── [ProjectName]/Context     ← 세션 상태 (1개만 유지)
-├── [ProjectName]/Core        ← 핵심 상식 (매 세션 로드)
-└── [ProjectName]/[Topic]     ← 토픽별 (온디맨드)
+├── [ProjectName]/Memory/Context     ← 세션 상태 (1개만 유지)
+├── [ProjectName]/Memory/Core        ← 핵심 상식 (매 세션 로드)
+└── [ProjectName]/Memory/[Topic]     ← 토픽별 (온디맨드)
 ```
 
 **Tier 2: 범용 메모리** — 프로젝트 무관, 모든 프로젝트에서 접근
