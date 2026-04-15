@@ -125,7 +125,7 @@ Provider 인증 상태:
 | `.opencode/agents/web-designer.md` | `{{PROJECT_NAME}}` | 프로젝트명 |
 | `opencode.json` | `<REPLACE_WITH_YOUR_TOKEN>` | Roam API 토큰 |
 | `opencode.json` | `<REPLACE_WITH_PROJECT_NAME>` | 프로젝트명 |
-| `src/lib/config.ts` | `projectSlug: "mvp-landing"` | `projectSlug: "[slug]"` |
+
 
 **치환 후 검증:** `grep -r '{{PROJECT_NAME}}\|{{DESCRIPTION}}\|<REPLACE_WITH' --include='*.md' --include='*.json' --include='*.ts' .` 실행.
 `setup.md` 자체와 `setup.sh`(이미 없음)를 제외하고 결과가 없어야 한다.

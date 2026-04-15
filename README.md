@@ -7,7 +7,7 @@
 - **AI Agent**: OpenCode + Oh My OpenAgent + Roam Research Memory
 - **Frontend**: Next.js 16 + Tailwind CSS v4 + Supabase (Netlify)
 - **Backend**: Hono + @hono/node-server (Railway)
-- **Database**: Supabase (shared project, `landing_page_id` isolation)
+- **Database**: Supabase
 
 ## Quick Start
 
@@ -65,7 +65,7 @@ cd server && npm run dev       # Backend  — http://localhost:3001
 | `NEXT_PUBLIC_SUPABASE_URL` | Frontend | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Frontend | Supabase anon key |
 | `NEXT_PUBLIC_API_URL` | Frontend | Backend API URL |
-| `NEXT_PUBLIC_PROJECT_SLUG` | Frontend | 프로젝트 식별자 (Supabase landing_page_id) |
+| `NEXT_PUBLIC_PROJECT_SLUG` | Frontend | 프로젝트 식별자 |
 | `SUPABASE_URL` | Backend | Supabase project URL |
 | `SUPABASE_SERVICE_ROLE_KEY` | Backend | Supabase service role key |
 | `CORS_ORIGINS` | Backend | 허용 CORS origins |
@@ -82,16 +82,9 @@ cd server && npm run dev       # Backend  — http://localhost:3001
 3. Env vars 설정
 4. Deploy
 
-## Content
-
-랜딩 페이지 콘텐츠는 `src/lib/config.ts` 한 파일에서 관리:
-- Headlines, story, features, CTA text
-- Survey questions
-- Design tokens (accent color, border radius)
-
 ## Database
 
-Supabase SQL Editor에서 `supabase/migrations/001_init.sql` 실행.
+Supabase SQL Editor에서 `supabase/migrations/` 내 SQL 파일 실행.
 
 ## AI Agent System
 
@@ -158,8 +151,6 @@ project/
 │   ├── app/                     # App Router pages
 │   ├── components/              # React components
 │   └── lib/
-│       ├── config.ts            # 랜딩 콘텐츠 (Forge 타겟)
-│       ├── i18n.ts              # 국제화
 │       └── supabase.ts          # Supabase client
 ├── server/                      # Hono Backend
 │   └── src/
@@ -169,11 +160,8 @@ project/
 ├── supabase/
 │   └── migrations/              # DB schema
 ├── netlify.toml                 # Netlify 빌드 설정
-├── CUSTOMIZATION.md             # 커스터마이징 가이드
 ├── package.json
 └── tsconfig.json
 ```
 
-## Customization
 
-자세한 커스터마이징 가이드는 [CUSTOMIZATION.md](./CUSTOMIZATION.md) 참조.
