@@ -143,27 +143,42 @@ roam_remember(
 )
 ```
 
-### 범용 메모리 (Agent Memory — 프로젝트 무관)
+### 범용 메모리 (Agent/Agent Memory — 프로젝트 무관)
 
 ```
 roam_remember(
-  memory="기억할 내용 #[[Agent Memory]]",
-  categories=["Agent/[Category]"],
+  memory="기억할 내용 #[[Agent/Agent Memory]]",
+  categories=["Agent/Agent Memory/[Category]"],
   include_memories_tag=false
 )
 ```
 
 **카테고리 선택:**
-- `Agent/Dev` — 개발 팁, 트러블슈팅, 도구 사용법
-- `Agent/Patterns` — 코드 패턴, 아키텍처 결정, 컨벤션
-- `Agent/Preferences` — 사용자 선호도, 워크플로우
-- `Agent/Lessons` — 실수, 해결책, 삽질 기록
+- `Agent/Agent Memory/Core` — 핵심 상식 (세션마다 자동 로드)
+- `Agent/Agent Memory/Dev` — 개발 팁, 트러블슈팅, 도구 사용법
+- `Agent/Agent Memory/Patterns` — 코드 패턴, 아키텍처 결정, 컨벤션
+- `Agent/Agent Memory/Preferences` — 사용자 선호도, 워크플로우, 도구 선택
+- `Agent/Agent Memory/Lessons` — 실수, 해결책, 삽질 기록
+
+**카테고리 목록 확인:** `roam_get_subpages(prefix="Agent/Agent Memory")`
 
 ### 저장 전 체크리스트
 
 1. "다음 세션 에이전트가 이걸 몰랐을 때 실패하는가?" → No면 저장 불필요
-2. "이건 이 프로젝트에서만 유효한가?" → Yes면 프로젝트 메모리, No면 Agent Memory
+2. "이건 이 프로젝트에서만 유효한가?" → Yes면 프로젝트 메모리, No면 Agent/Agent Memory
 3. `roam_recall()` 응답이 **1,000 토큰 이내** 유지되는가?
+
+---
+
+## 범용 메모리 조회 패턴
+
+| 목적 | 도구 |
+|------|------|
+| Core (세션 시작 시 자동) | `roam_search_for_tag(primary_tag="Agent/Agent Memory", near_tag="Agent/Agent Memory/Core")` |
+| 카테고리별 | `roam_search_for_tag(primary_tag="Agent/Agent Memory", near_tag="Agent/Agent Memory/[Category]")` |
+| 카테고리 목록 확인 | `roam_get_subpages(prefix="Agent/Agent Memory")` |
+| Agent 전체 구조 | `roam_get_subpages(prefix="Agent")` |
+| 이미 공유된 지식인지 확인 | 해당 카테고리 검색 후 중복 여부 판단 |
 
 ---
 
@@ -274,7 +289,7 @@ Roam 테이블은 중첩 블록 구조:
  [?b :block/string ?string]
  [?b :block/uid ?uid]
  [?b :block/refs ?ref]
- [?ref :node/title "Agent Memory"]
+ [?ref :node/title "Agent/Agent Memory"]
  [(clojure.string/includes? ?string "패턴")]
  :limit 20]
 ```

@@ -109,11 +109,12 @@ Supabase SQL Editor에서 `supabase/migrations/001_init.sql` 실행.
 **Tier 2: 범용 메모리** — 프로젝트 무관, 모든 프로젝트에서 접근
 
 ```
-Agent Memory/
-├── Agent/Dev            ← 개발 팁
-├── Agent/Patterns       ← 패턴/컨벤션
-├── Agent/Preferences    ← 사용자 선호도
-└── Agent/Lessons        ← 교훈
+Agent/Agent Memory/
+├── Agent/Agent Memory/Core         ← 핵심 상식 (세션마다 자동 로드)
+├── Agent/Agent Memory/Dev          ← 개발 팁
+├── Agent/Agent Memory/Patterns     ← 패턴/컨벤션
+├── Agent/Agent Memory/Preferences  ← 사용자 선호도
+└── Agent/Agent Memory/Lessons      ← 교훈
 ```
 
 ### Available Agents

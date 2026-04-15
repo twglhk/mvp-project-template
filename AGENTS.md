@@ -21,6 +21,7 @@
 > **Work Blocks:** `roam_fetch_page_by_title("{{PROJECT_NAME}}/WorkBlocks")`
 > **Current Context:** `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/Context")` — 항상 로드
 > **Core 상식:** `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/Core")` — 항상 로드 (세션마다 필수 기반 지식)
+> **Agent Core:** `roam_search_for_tag(primary_tag="Agent/Agent Memory", near_tag="Agent/Agent Memory/Core")` — 항상 로드 (범용 핵심 지식)
 > **토픽별 조회:** `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/[Topic]")` — 온디맨드 (태그 목록: {{PROJECT_NAME}}/Memory 페이지 참조)
 
 **문서 정책:** 모든 문서 작업은 RoamResearch 우선. 로컬 백업 불필요 (정본 = Roam).
@@ -29,8 +30,9 @@
 
 1. `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/Context")` — Current Context 로드
 2. `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/Core")` — 핵심 상식 로드 (항상 필요)
-3. `roam_fetch_page_by_title("{{PROJECT_NAME}}/WorkBlocks")` — 현재 Block + 미완료 Sub Task 파악 → Todo 등록
-4. 사용자 요청에서 토픽 추론 → `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/[Topic]")` 추가 실행
+3. `roam_search_for_tag(primary_tag="Agent/Agent Memory", near_tag="Agent/Agent Memory/Core")` — 범용 핵심 상식 로드 (항상 필요)
+4. `roam_fetch_page_by_title("{{PROJECT_NAME}}/WorkBlocks")` — 현재 Block + 미완료 Sub Task 파악 → Todo 등록
+5. 사용자 요청에서 토픽 추론 → `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/[Topic]")` 추가 실행
 
 ### Block Rules
 
@@ -72,17 +74,10 @@ Roam에 데이터를 읽거나 쓸 때, 문법이나 도구 사용법이 불확�
 └── {{PROJECT_NAME}}/Memory/[Topic]       ← 토픽별 메모리 (온디맨드)
 ```
 
-#### Tier 2: 범용 메모리 (`Agent Memory`)
+#### Tier 2: 범용 메모리 (`Agent/Agent Memory`)
 
-프로젝트를 넘어 모든 작업에서 유효한 지식. 직접 태깅.
-
-```
-Agent Memory/
-├── Agent/Dev                      ← 개발 관련 범용 지식 (트러블슈팅, 도구 팁)
-├── Agent/Patterns                 ← 패턴/컨벤션 (코드스타일, 아키텍처 결정)
-├── Agent/Preferences              ← 사용자 선호도 (워크플로우, 도구 선택)
-└── Agent/Lessons                  ← 배운 교훈 (실수, 해결책, 삽질 기록)
-```
+프로젝트를 넘어 모든 작업에서 유효한 지식. 카테고리 목록: `roam_get_subpages(prefix="Agent/Agent Memory")` 참조.
+저장/조회 상세 패턴은 `skill("roam-research")` 로드 후 참조.
 
 ### 기억 저장
 
@@ -94,19 +89,10 @@ roam_remember(
 )
 ```
 
-**범용 메모리 (프로젝트 무관한 지식일 때):**
-```
-roam_remember(
-  memory="기억할 내용 #[[Agent Memory]]",
-  categories=["Agent/[Category]"],
-  include_memories_tag=false
-)
-```
-
 - 프로젝트 메모리: `#[[{{PROJECT_NAME}}/Memory]]` 자동 추가 (`ROAM_MEMORIES_TAG`)
-- 범용 메모리: `include_memories_tag=false` + `#[[Agent Memory]]`를 memory 텍스트에 직접 포함
+- 범용 메모리 저장 패턴은 `skill("roam-research")` 참조
 - 기록 전 자문: "다음 세션 Agent가 이걸 몰랐을 때 실패하는가?" → Yes면 기록
-- 추가 자문: "이건 이 프로젝트에서만 유효한가, 어디서든 유효한가?" → 후자면 범용 메모리
+- 추가 자문: "이건 이 프로젝트에서만 유효한가, 어디서든 유효한가?" → 후자면 범용 메모리 (skill 참조)
 
 ### 기억 조회
 
@@ -115,8 +101,7 @@ roam_remember(
 | Current Context | `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/Context")` |
 | 전체 프로젝트 메모리 | `roam_recall()` (필터 없는 전체 덤프 전용) |
 | 토픽별 필터 | `roam_search_for_tag(primary_tag="{{PROJECT_NAME}}/Memory", near_tag="{{PROJECT_NAME}}/Memory/[Topic]")` |
-| 범용 메모리 전체 | `roam_search_for_tag(primary_tag="Agent Memory")` |
-| 범용 메모리 카테고리별 | `roam_search_for_tag(primary_tag="Agent Memory", near_tag="Agent/Dev")` 등 |
+| 범용 메모리 | `skill("roam-research")` 참조 |
 
 ### Current Context 업데이트 (항상 최신 1개만 유지)
 
@@ -154,7 +139,7 @@ roam_remember(
 ### 4. RoamResearch Memory 업데이트
 
 - **Current Context** 업데이트: `roam_remember(memory="...", categories=["{{PROJECT_NAME}}/Memory/Context"])` (이전 블록 먼저 삭제)
-- **범용 메모리** 체크: 이번 세션에서 프로젝트 무관한 유용한 지식이 있었는지 확인 → 있으면 Agent Memory에 기록
+- **범용 메모리** 체크: 이번 세션에서 프로젝트 무관한 유용한 지식이 있었는지 확인 → 있으면 Agent/Agent Memory에 기록 (skill 참조)
 
 ### 5. 기억/망각 정리
 
