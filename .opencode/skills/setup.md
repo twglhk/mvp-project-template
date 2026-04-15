@@ -10,7 +10,60 @@ AGENTS.md에 `{{PROJECT_NAME}}` 플레이스홀더가 남아있을 때 자동으
 
 ---
 
-## Phase 1: 정보 수집
+## Phase 1: Provider 인증 확인
+
+OpenCode는 여러 AI provider를 동시에 사용한다. `.opencode/oh-my-openagent.json`에 설정된 모델들이 동작하려면, 각 provider의 인증이 완료되어야 한다.
+
+### 1-1. 인증 상태 확인
+
+`opencode auth list` 실행 → 현재 설정된 provider 목록 확인.
+
+### 1-2. 필요한 Provider 목록
+
+`oh-my-openagent.json`에서 사용하는 provider:
+
+| Provider | 모델 prefix | 인증 방식 | 사용처 |
+|----------|------------|----------|--------|
+| Anthropic | `anthropic/` | OAuth (`opencode auth login anthropic`) | 메인 에이전트, Oracle, Visual Engineering 등 (핵심) |
+| OpenAI | `openai/` | API key (`opencode auth login openai`) | Quick tasks |
+| Google | `google/` | API key (`opencode auth login google`) | Document writer, Writing |
+| OpenCode Go | `opencode-go/` | API key (`opencode auth login opencode-go`) | Librarian (MiniMax) |
+| GitHub Copilot | `github-copilot/` | GitHub Copilot 구독 + OAuth (`opencode auth login github-copilot`) | Explore (Grok) |
+
+> **참고:** GitHub Copilot provider는 GitHub Copilot 구독이 필요하다. xAI API key가 있다면 `oh-my-openagent.json`에서 `github-copilot/grok-code-fast-1`을 `xai/grok-3-fast`로 변경하여 대체할 수 있다.
+
+### 1-3. 미설정 Provider 안내
+
+`opencode auth list` 결과와 위 목록을 비교하여, 미설정 provider가 있으면 안내한다.
+
+**필수 (이것 없이는 기본 동작 불가):**
+- **Anthropic** — 메인 에이전트(Sisyphus)와 Oracle이 Anthropic을 사용. 미설정 시 OpenCode 자체가 사실상 동작하지 않음.
+
+**권장 (없어도 동작하지만, 해당 기능 비활성화):**
+- **OpenAI** — Quick task 카테고리. 미설정 시 해당 카테고리 사용 불가.
+- **Google** — Writing/문서 작성. 미설정 시 해당 카테고리 사용 불가.
+- **OpenCode Go** — Librarian 에이전트. 미설정 시 문서 검색 에이전트 사용 불가.
+- **GitHub Copilot (또는 xAI)** — Explore 에이전트. 미설정 시 코드베이스 탐색 에이전트 사용 불가.
+
+**안내 메시지 예시:**
+
+```
+Provider 인증 상태:
+✅ Anthropic (필수)
+✅ OpenAI
+❌ Google — `opencode auth login google`으로 설정
+❌ OpenCode Go — `opencode auth login opencode-go`으로 설정
+❌ GitHub Copilot — `opencode auth login github-copilot`으로 설정 (GitHub Copilot 구독 필요)
+
+미설정 provider가 있어도 셋업은 진행 가능합니다. 해당 에이전트/카테고리만 비활성화됩니다.
+나중에 언제든 `opencode auth login [provider]`로 추가 설정할 수 있습니다.
+```
+
+**Anthropic이 미설정인 경우:** 셋업을 중단하고 먼저 설정하도록 안내한다. 나머지 provider는 경고만 표시하고 계속 진행.
+
+---
+
+## Phase 2: 정보 수집
 
 사용자에게 다음 정보를 **한 번에** 수집한다. 한 질문씩 나누지 않는다.
 
@@ -51,7 +104,7 @@ AGENTS.md에 `{{PROJECT_NAME}}` 플레이스홀더가 남아있을 때 자동으
 
 ---
 
-## Phase 2: 파일 플레이스홀더 치환
+## Phase 3: 파일 플레이스홀더 치환
 
 수집한 정보로 아래 파일들을 수정한다. **sed 또는 Edit 도구 사용.**
 
@@ -79,7 +132,7 @@ AGENTS.md에 `{{PROJECT_NAME}}` 플레이스홀더가 남아있을 때 자동으
 
 ---
 
-## Phase 3: .env 생성
+## Phase 4: .env 생성
 
 `.env` 파일이 없으면 생성한다:
 
@@ -97,11 +150,11 @@ NEXT_PUBLIC_PROJECT_SLUG=[slug]
 
 ---
 
-## Phase 4: Roam 페이지 생성
+## Phase 5: Roam 페이지 생성
 
 Roam MCP가 연결되지 않았으면 (토큰 미설정 등) 이 Phase를 스킵하고, 사용자에게 수동 생성 안내.
 
-### 4-1. `[ProjectName]` 최상위 페이지
+### 5-1. `[ProjectName]` 최상위 페이지
 
 `roam_create_page` 사용:
 
@@ -116,7 +169,7 @@ content:
   - (사용자 추가 참조들도 level 2로)
 ```
 
-### 4-2. `[ProjectName]/WorkBlocks` 페이지
+### 5-2. `[ProjectName]/WorkBlocks` 페이지
 
 `roam_create_page` 사용:
 
@@ -126,7 +179,7 @@ content:
   - level 1: "> **원칙:** Block이 완료되지 않으면 다음 Block으로 진행하지 않는다. 참조: AGENTS.md"
 ```
 
-### 4-3. `[ProjectName]/Memory` 페이지
+### 5-3. `[ProjectName]/Memory` 페이지
 
 `roam_create_page` 사용:
 
@@ -141,7 +194,7 @@ content:
 
 ---
 
-## Phase 5: 의존성 설치
+## Phase 6: 의존성 설치
 
 순서대로 실행:
 
@@ -155,9 +208,10 @@ cd server && npm install  # backend
 
 ---
 
-## Phase 6: 완료 보고
+## Phase 7: 완료 보고
 
 체크리스트:
+- [ ] Provider 인증 확인 (최소 Anthropic 필수)
 - [ ] 모든 플레이스홀더 치환 완료 (grep 결과 없음)
 - [ ] opencode.json에 유효한 Roam 토큰 설정
 - [ ] .env 파일 생성

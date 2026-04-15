@@ -45,6 +45,13 @@ cd server && npm run dev       # Backend  — http://localhost:3001
 - [Oh My OpenAgent](https://github.com/code-yeongyu/oh-my-openagent) 글로벌 플러그인 등록
   - `~/.config/opencode/opencode.json`에 `"plugin": ["oh-my-openagent"]` 포함 필요
 - Roam Research API 토큰 ([발급 방법](https://roamresearch.com/#/app/developer))
+- **AI Provider 인증** — 이 프로젝트는 여러 AI provider를 사용한다. 셋업 시 에이전트가 안내하지만, 미리 설정하려면:
+  - **Anthropic** (필수): `opencode auth login anthropic`
+  - OpenAI: `opencode auth login openai`
+  - Google: `opencode auth login google`
+  - OpenCode Go (MiniMax): `opencode auth login opencode-go`
+  - GitHub Copilot (Grok): `opencode auth login github-copilot` (GitHub Copilot 구독 필요)
+  - 설정 현황 확인: `opencode auth list`
 
 ## Environment Variables
 
