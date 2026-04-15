@@ -15,42 +15,28 @@
 
 GitHub에서 **"Use this template"** 클릭 → 새 레포 생성.
 
-### 2. Clone & Setup
+### 2. Roam API 토큰 설정
+
+`opencode.json`의 `ROAM_API_TOKEN`에 Roam Research API 토큰을 입력한다.
+
+### 3. OpenCode 실행 → 자동 셋업
 
 ```bash
-git clone <your-new-repo-url>
-cd <your-new-repo>
-chmod +x setup.sh
-./setup.sh
+opencode
 ```
 
-스크립트가 처리하는 것:
-- 프로젝트 이름 → `AGENTS.md`, `README.md`, `opencode.json` 등의 플레이스홀더 치환
-- Roam API 토큰 + 그래프 이름 → `opencode.json` 설정
-- `.env` 자동 생성
-- OpenCode 플러그인 설치
+첫 실행 시 AI 에이전트가 `{{PROJECT_NAME}}` 플레이스홀더를 감지하고 **대화형 셋업**을 시작한다:
 
-### 3. Roam 페이지 생성
+- 프로젝트 이름, 설명, 목적 등 수집
+- 파일 플레이스홀더 치환 (`AGENTS.md`, `README.md`, `opencode.json` 등)
+- Roam 페이지 자동 생성 (`[ProjectName]`, `WorkBlocks`, `Memory`)
+- `.env` 생성 + 의존성 설치
 
-셋업 후 Roam에서 두 페이지를 만든다:
-
-- **`[ProjectName] WorkBlocks`** — 작업 블록 관리용
-- **`[ProjectName] Memory`** — 프로젝트 메모리 저장소
-
-### 4. Install & Run
+### 4. Dev Server
 
 ```bash
-# Frontend
-npm install
-npm run dev          # http://localhost:3000
-
-# Backend
-cd server
-npm install
-npm run dev          # http://localhost:3001
-
-# OpenCode (AI Agent)
-opencode
+npm run dev                    # Frontend — http://localhost:3000
+cd server && npm run dev       # Backend  — http://localhost:3001
 ```
 
 ## Prerequisites
@@ -68,7 +54,7 @@ opencode
 |----------|-------|-------------|
 | `PROJECT_NAME` | Setup | 프로젝트 이름 (Roam 메모리 태그에 사용) |
 | `ROAM_API_TOKEN` | Setup | Roam Research API 토큰 |
-| `ROAM_GRAPH_NAME` | Setup | Roam 그래프 이름 |
+| `ROAM_GRAPH_NAME` | 고정 | Roam 그래프 이름 (John_Development_Graph) |
 | `NEXT_PUBLIC_SUPABASE_URL` | Frontend | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Frontend | Supabase anon key |
 | `NEXT_PUBLIC_API_URL` | Frontend | Backend API URL |
@@ -151,7 +137,7 @@ project/
 ├── .env.example                 # 환경변수 템플릿
 ├── .gitignore
 ├── opencode.json                # MCP 서버 설정 (gitignored)
-├── setup.sh                     # 초기화 스크립트 (사용 후 삭제 가능)
+├── .opencode/skills/setup.md    # 초기 셋업 skill (에이전트가 자동 실행)
 ├── .opencode/
 │   ├── oh-my-openagent.json     # 모델/카테고리 프리셋
 │   ├── package.json             # 플러그인 의존성

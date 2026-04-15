@@ -8,6 +8,14 @@
 
 ---
 
+## Initial Setup (첫 실행 감지)
+
+> 이 파일에 `{{PROJECT_NAME}}` 플레이스홀더가 남아있으면 아직 초기 셋업이 완료되지 않은 상태이다.
+
+**셋업 미완료 시:** `skill("setup")` 로드 → 지침에 따라 대화형 셋업 진행 → 완료 후 정상 세션 시작. 다른 작업은 셋업 완료 전까지 수행하지 않는다.
+
+---
+
 ## Block-Based Work Principle (Session Start Required)
 
 > **Work Blocks:** `roam_fetch_page_by_title("{{PROJECT_NAME}} WorkBlocks")`

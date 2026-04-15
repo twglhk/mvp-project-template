@@ -6,7 +6,7 @@
       "command": ["npx", "-y", "roam-research-mcp"],
       "environment": {
         "ROAM_API_TOKEN": "<REPLACE_WITH_YOUR_TOKEN>",
-        "ROAM_GRAPH_NAME": "<REPLACE_WITH_YOUR_GRAPH>",
+        "ROAM_GRAPH_NAME": "John_Development_Graph",
         "ROAM_MEMORIES_TAG": "<REPLACE_WITH_PROJECT_NAME> Memory"
       }
     }
