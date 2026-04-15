@@ -36,10 +36,10 @@ AGENTS.md에 `{{PROJECT_NAME}}` 플레이스홀더가 남아있을 때 자동으
 기본값을 보여준 뒤 추가 여부를 묻는다:
 
 **프로젝트 페이지 참조 (기본):**
-- `[ProjectName] WorkBlocks`
-- `[ProjectName] Memory`
-- `[ProjectName] PRD`
-- `[ProjectName] Six Pager`
+- `[ProjectName]/WorkBlocks`
+- `[ProjectName]/Memory`
+- `[ProjectName]/PRD`
+- `[ProjectName]/Six Pager`
 
 → "추가할 페이지 참조가 있나요? (없으면 엔터)"
 
@@ -109,29 +109,29 @@ Roam MCP가 연결되지 않았으면 (토큰 미설정 등) 이 Phase를 스킵
 title: "[ProjectName]"
 content:
   - level 1, heading 2: "Pages"
-  - level 2: "[[{ProjectName} WorkBlocks]]"
-  - level 2: "[[{ProjectName} Memory]]"
-  - level 2: "[[{ProjectName} PRD]]"
-  - level 2: "[[{ProjectName} Six Pager]]"
+  - level 2: "[[{ProjectName}/WorkBlocks]]"
+  - level 2: "[[{ProjectName}/Memory]]"
+  - level 2: "[[{ProjectName}/PRD]]"
+  - level 2: "[[{ProjectName}/Six Pager]]"
   - (사용자 추가 참조들도 level 2로)
 ```
 
-### 4-2. `[ProjectName] WorkBlocks` 페이지
+### 4-2. `[ProjectName]/WorkBlocks` 페이지
 
 `roam_create_page` 사용:
 
 ```
-title: "[ProjectName] WorkBlocks"
+title: "[ProjectName]/WorkBlocks"
 content:
   - level 1: "> **원칙:** Block이 완료되지 않으면 다음 Block으로 진행하지 않는다. 참조: AGENTS.md"
 ```
 
-### 4-3. `[ProjectName] Memory` 페이지
+### 4-3. `[ProjectName]/Memory` 페이지
 
 `roam_create_page` 사용:
 
 ```
-title: "[ProjectName] Memory"
+title: "[ProjectName]/Memory"
 content:
   - level 1, heading 3: "메모리 태그"
   - level 2: "[[{ProjectName}/Context]] — 현재 세션 상태 (항상 최신 1개만 유지)"
@@ -161,7 +161,7 @@ cd server && npm install  # backend
 - [ ] 모든 플레이스홀더 치환 완료 (grep 결과 없음)
 - [ ] opencode.json에 유효한 Roam 토큰 설정
 - [ ] .env 파일 생성
-- [ ] Roam 페이지 3개 생성 (또는 수동 생성 안내)
+- [ ] Roam 페이지 3개 생성: [ProjectName], [ProjectName]/WorkBlocks, [ProjectName]/Memory (또는 수동 생성 안내)
 - [ ] npm install 완료
 
 사용자에게 보고:
@@ -170,7 +170,7 @@ cd server && npm install  # backend
 셋업 완료.
 
 - 프로젝트: [ProjectName] (slug: [slug])
-- Roam: [ProjectName] / [ProjectName] WorkBlocks / [ProjectName] Memory 페이지 생성
+- Roam: [ProjectName] / [ProjectName]/WorkBlocks / [ProjectName]/Memory 페이지 생성
 - 메모리 태그: Context, Core[, 추가 태그들]
 
 다음 단계:

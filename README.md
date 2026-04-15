@@ -93,7 +93,7 @@ Supabase SQL Editor에서 `supabase/migrations/001_init.sql` 실행.
 **Tier 1: 프로젝트 메모리** — `ROAM_MEMORIES_TAG`로 자동 태깅
 
 ```
-[ProjectName] Memory/
+[ProjectName]/Memory/
 ├── [ProjectName]/Context     ← 세션 상태 (1개만 유지)
 ├── [ProjectName]/Core        ← 핵심 상식 (매 세션 로드)
 └── [ProjectName]/[Topic]     ← 토픽별 (온디맨드)
