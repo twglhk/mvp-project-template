@@ -54,6 +54,17 @@ Roam에 데이터를 읽거나 쓸 때, 문법이나 도구 사용법이 불확�
 
 ---
 
+## Code Review & Discussion Skill
+
+코드 리뷰 및 기술 토론 프로토콜은 **skill로 분리**되어 있다.
+
+- **메인 에이전트**: `skill("code-review")` 호출로 로드
+- **서브에이전트 위임 시**: `task(..., load_skills=["code-review"])` 로 주입
+
+Sisyphus × Oracle 시니어 엔지니어 페어 리뷰. 모든 주장에 외부 근거(기술 문서, CWE, 블로그) 필수. 아키텍처 평가, 보안 점검, 프로덕션 readiness 체크에 사용.
+
+---
+
 ## Memory 운영 원칙 (RoamResearch)
 
 > **전제 조건:** MCP 설정에 `ROAM_MEMORIES_TAG="{{PROJECT_NAME}}/Memory"` 필수.
